@@ -131,6 +131,145 @@ def tema_uygula() -> None:
              "Color(0xFFEA580C),\n                  Color(0xFFF59E0B),", "tema: bilgi karti rengi")
 
 
+def yerlesim_uygula() -> None:
+    """Kopru yerlesimi: ortada buyuk ID karti, hap seklinde dugmeler, sicak renkli ust alan."""
+    c = "flutter/lib/common.dart"
+    # Tum ana dugmeler hap (stadium) seklinde
+    degistir(c,
+             r"((?:Elevated|Outlined)Button\.styleFrom\((?:(?!styleFrom)[\s\S])*?shape: )"
+             r"RoundedRectangleBorder\(\s*borderRadius: BorderRadius\.circular\(12\.0\),\s*\)",
+             lambda m: m.group(1) + "const StadiumBorder()", "yerlesim: hap dugmeler", regex=True)
+
+    # Baslik ortali
+    degistir("flutter/lib/common/widgets/connection_page_title.dart",
+             "child: Row(\n        children: [\n          AutoSizeText(\n            translate('Control Remote Desktop'),",
+             "child: Row(\n        mainAxisAlignment: MainAxisAlignment.center,\n        children: [\n"
+             "          AutoSizeText(\n            translate('Control Remote Desktop'),",
+             "yerlesim: ortali baslik")
+
+    p = "flutter/lib/desktop/pages/connection_page.dart"
+    # Sag panelin ustu: sicak gecisli genis alan, kart ortada
+    degistir(p,
+             "            Row(\n"
+             "              children: [\n"
+             "                Flexible(child: _buildRemoteIDTextField(context)),\n"
+             "              ],\n"
+             "            ).marginOnly(top: 22),\n"
+             "            SizedBox(height: 12),\n"
+             "            Divider().paddingOnly(right: 12),\n"
+             "            Expanded(child: PeerTabPage()),",
+             "            Container(\n"
+             "              width: double.infinity,\n"
+             "              margin: const EdgeInsets.only(top: 12, right: 12),\n"
+             "              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),\n"
+             "              decoration: BoxDecoration(\n"
+             "                borderRadius: BorderRadius.circular(24),\n"
+             "                gradient: LinearGradient(\n"
+             "                  begin: Alignment.topLeft,\n"
+             "                  end: Alignment.bottomRight,\n"
+             "                  colors: Theme.of(context).brightness == Brightness.dark\n"
+             "                      ? const [Color(0xFF3A2619), Color(0xFF1C1E22)]\n"
+             "                      : const [Color(0xFFFFE1CC), Color(0xFFFFF6EE)],\n"
+             "                ),\n"
+             "              ),\n"
+             "              child: Center(child: _buildRemoteIDTextField(context)),\n"
+             "            ),\n"
+             "            SizedBox(height: 14),\n"
+             "            Expanded(child: PeerTabPage()),",
+             "yerlesim: ortada baglanti alani")
+    # Kart: genis, dolgulu, golgeli, yuvarlak
+    degistir(p,
+             "    var w = Container(\n"
+             "      width: 320 + 20 * 2,\n"
+             "      padding: const EdgeInsets.fromLTRB(20, 24, 20, 22),\n"
+             "      decoration: BoxDecoration(\n"
+             "          borderRadius: const BorderRadius.all(Radius.circular(13)),\n"
+             "          border: Border.all(color: Theme.of(context).colorScheme.background)),",
+             "    var w = Container(\n"
+             "      width: 460,\n"
+             "      padding: const EdgeInsets.fromLTRB(28, 24, 28, 24),\n"
+             "      decoration: BoxDecoration(\n"
+             "          color: Theme.of(context).brightness == Brightness.dark\n"
+             "              ? const Color(0xFF24282E)\n"
+             "              : Colors.white,\n"
+             "          borderRadius: const BorderRadius.all(Radius.circular(24)),\n"
+             "          boxShadow: [\n"
+             "            BoxShadow(\n"
+             "                color: Colors.black.withOpacity(0.18),\n"
+             "                blurRadius: 24,\n"
+             "                offset: const Offset(0, 8)),\n"
+             "          ]),",
+             "yerlesim: baglanti karti")
+    # ID kutusu: ortali yazi, hap seklinde, dolgulu
+    degistir(p, "maxLines: 1,\n                          cursorColor:",
+             "maxLines: 1,\n                          textAlign: TextAlign.center,\n                          cursorColor:",
+             "yerlesim: ortali ID yazisi")
+    degistir(p,
+             "decoration: InputDecoration(\n"
+             "                              filled: false,\n"
+             "                              counterText: '',",
+             "decoration: InputDecoration(\n"
+             "                              filled: true,\n"
+             "                              fillColor: Theme.of(context).brightness == Brightness.dark\n"
+             "                                  ? const Color(0xFF1B1E22)\n"
+             "                                  : const Color(0xFFF7F1EB),\n"
+             "                              border: OutlineInputBorder(\n"
+             "                                  borderRadius: BorderRadius.circular(30),\n"
+             "                                  borderSide: BorderSide.none),\n"
+             "                              focusedBorder: OutlineInputBorder(\n"
+             "                                  borderRadius: BorderRadius.circular(30),\n"
+             "                                  borderSide: const BorderSide(\n"
+             "                                      color: MyTheme.accent, width: 2)),\n"
+             "                              counterText: '',",
+             "yerlesim: hap ID kutusu")
+    degistir(p, "maxWidth: 319,", "maxWidth: 404,", "yerlesim: oneri listesi genisligi")
+    # Dugmeler: genis hap 'Baglan' + yuvarlak menu dugmesi
+    degistir(p, "padding: const EdgeInsets.only(top: 13.0),", "padding: const EdgeInsets.only(top: 18.0),",
+             "yerlesim: dugme boslugu")
+    degistir(p,
+             "child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [\n"
+             "                SizedBox(\n"
+             "                  height: 28.0,\n"
+             "                  child: ElevatedButton(\n"
+             "                    onPressed: () {\n"
+             "                      onConnect();\n"
+             "                    },\n"
+             "                    child: Text(translate(\"Connect\")),\n"
+             "                  ),\n"
+             "                ),\n"
+             "                const SizedBox(width: 8),\n"
+             "                Container(\n"
+             "                  height: 28.0,\n"
+             "                  width: 28.0,\n"
+             "                  decoration: BoxDecoration(\n"
+             "                    border: Border.all(color: Theme.of(context).dividerColor),\n"
+             "                    borderRadius: BorderRadius.circular(8),\n"
+             "                  ),",
+             "child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [\n"
+             "                Expanded(\n"
+             "                  child: SizedBox(\n"
+             "                  height: 46.0,\n"
+             "                  child: ElevatedButton(\n"
+             "                    onPressed: () {\n"
+             "                      onConnect();\n"
+             "                    },\n"
+             "                    child: Text(translate(\"Connect\"),\n"
+             "                        style: const TextStyle(\n"
+             "                            fontSize: 16, fontWeight: FontWeight.w600)),\n"
+             "                  ),\n"
+             "                )),\n"
+             "                const SizedBox(width: 10),\n"
+             "                Container(\n"
+             "                  height: 46.0,\n"
+             "                  width: 46.0,\n"
+             "                  decoration: BoxDecoration(\n"
+             "                    border: Border.all(color: Theme.of(context).dividerColor),\n"
+             "                    shape: BoxShape.circle,\n"
+             "                  ),",
+             "yerlesim: Baglan ve menu dugmeleri")
+    degistir(p, "Icon(IconFont.more, size: 14)", "Icon(IconFont.more, size: 18)", "yerlesim: menu ikonu")
+
+
 def rc_metni(s: str) -> str:
     """Windows kaynak (.rc) dosyasi icin ASCII'ye cevirir (o, u vb.)."""
     tablo = str.maketrans("çğıöşüÇĞİÖŞÜ", "cgiosuCGIOSU")
@@ -220,6 +359,7 @@ def main() -> None:
 
     # --- Renk temasi ---------------------------------------------------------
     tema_uygula()
+    yerlesim_uygula()
 
     # --- Windows dosya ozellikleri (Ozellikler > Ayrintilar) ---------------
     rc_ad = rc_metni(gorunen)
