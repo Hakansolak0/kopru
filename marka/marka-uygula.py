@@ -59,6 +59,78 @@ def degistir(yol: str, kalip: str, yeni, aciklama: str, regex: bool = False) -> 
     print(f"  [tamam] {aciklama} ({adet})")
 
 
+def tema_uygula() -> None:
+    """'Gun Batimi' temasi: antrasit sol panel, turuncu vurgu, sicak tonlar, daha yuvarlak koseler."""
+    c = "flutter/lib/common.dart"
+    # Ana renkler
+    degistir(c, "static const Color grayBg = Color(0xFFEFEFF2);", "static const Color grayBg = Color(0xFFF4EFEA);", "tema: acik arka plan")
+    degistir(c, "static const Color accent = Color(0xFF0071FF);", "static const Color accent = Color(0xFFEA580C);", "tema: vurgu rengi")
+    degistir(c, "static const Color accent50 = Color(0x770071FF);", "static const Color accent50 = Color(0x77EA580C);", "tema: vurgu %50")
+    degistir(c, "static const Color accent80 = Color(0xAA0071FF);", "static const Color accent80 = Color(0xAAEA580C);", "tema: vurgu %80")
+    degistir(c, "static const Color idColor = Color(0xFF00B6F0);", "static const Color idColor = Color(0xFFF97316);", "tema: ID rengi")
+    degistir(c, "static const Color button = Color(0xFF2C8CFF);", "static const Color button = Color(0xFFEA580C);", "tema: dugme rengi")
+    degistir(c, "primary: Colors.blue, secondary: accent, background: grayBg),",
+             "primary: accent, secondary: accent, background: grayBg),", "tema: acik renk semasi")
+    degistir(c, "primary: Colors.blue,\n      secondary: accent,", "primary: accent,\n      secondary: accent,", "tema: koyu renk semasi")
+    # Acik tema yuzeyleri
+    degistir(c, "hoverColor: Color.fromARGB(255, 224, 224, 224),", "hoverColor: Color(0xFFEFE6DD),", "tema: acik hover")
+    degistir(c, "scaffoldBackgroundColor: Colors.white,\n    dialogBackgroundColor: Colors.white,",
+             "scaffoldBackgroundColor: Color(0xFFFFFCF9),\n    dialogBackgroundColor: Color(0xFFFFFCF9),", "tema: acik zemin")
+    degistir(c, "border: Color(0xFFCCCCCC),\n    border2: Color(0xFFBBBBBB),",
+             "border: Color(0xFFE3D8CD),\n    border2: Color(0xFFD4C6B8),", "tema: acik kenarliklar")
+    degistir(c, "highlight: Color(0xFFE5E5E5),", "highlight: Color(0xFFF1E8DF),", "tema: acik vurgu zemini")
+    # Koyu tema yuzeyleri (antrasit)
+    degistir(c, "Color(0xFF18191E)", "Color(0xFF16181B)", "tema: koyu zemin")
+    degistir(c, "Color(0xFF24252B)", "Color(0xFF24282E)", "tema: koyu kartlar")
+    degistir(c, "hoverColor: Color.fromARGB(255, 45, 46, 53),", "hoverColor: Color(0xFF2E3238),", "tema: koyu hover")
+    # Daha yuvarlak koseler
+    degistir(c, "BorderRadius.circular(8.0)", "BorderRadius.circular(12.0)", "tema: dugme koseleri")
+    degistir(c, "BorderRadius.circular(18.0)", "BorderRadius.circular(20.0)", "tema: pencere koseleri")
+    degistir(c, r"(OutlineInputBorder\(\s*borderRadius: BorderRadius\.circular\()8(\))",
+             lambda m: m.group(1) + "12" + m.group(2), "tema: giris kutusu koseleri", regex=True)
+    degistir(c, "borderRadius: BorderRadius.all(Radius.circular(8.0)),",
+             "borderRadius: BorderRadius.all(Radius.circular(12.0)),", "tema: menu koseleri")
+    # Sol panel icin koyu tema (antrasit zemin uzerinde beyaz yazi)
+    degistir(c, "static const Color hoverBorder = Color(0xFF999999);",
+             "static const Color hoverBorder = Color(0xFF999999);\n\n"
+             "  static ThemeData get sidebarTheme => darkTheme.copyWith(\n"
+             "        inputDecorationTheme: const InputDecorationTheme(\n"
+             "            filled: false, isDense: true, border: InputBorder.none),\n"
+             "        colorScheme:\n"
+             "            darkTheme.colorScheme.copyWith(background: Color(0xFF353038)),\n"
+             "      );",
+             "tema: sol panel temasi")
+
+    t = "flutter/lib/desktop/widgets/tabbar_widget.dart"
+    degistir(t, "unSelectedTabIconColor: Color.fromARGB(255, 162, 203, 241),",
+             "unSelectedTabIconColor: Color(0xFFF8CBA6),", "tema: acik sekme ikonlari")
+    degistir(t, "unSelectedTabIconColor: Color.fromARGB(255, 30, 65, 98),",
+             "unSelectedTabIconColor: Color(0xFF6B3A1E),", "tema: koyu sekme ikonlari")
+
+    h = "flutter/lib/desktop/pages/desktop_home_page.dart"
+    degistir(h,
+             "      child: Container(\n"
+             "        width: isIncomingOnly ? 280.0 : 200.0,\n"
+             "        color: Theme.of(context).colorScheme.background,\n",
+             "      child: Theme(\n"
+             "        data: MyTheme.sidebarTheme,\n"
+             "        child: Container(\n"
+             "        width: isIncomingOnly ? 280.0 : 200.0,\n"
+             "        decoration: const BoxDecoration(\n"
+             "            gradient: LinearGradient(\n"
+             "                begin: Alignment.topLeft,\n"
+             "                end: Alignment.bottomRight,\n"
+             "                colors: [Color(0xFF1F2328), Color(0xFF2E2620)])),\n",
+             "tema: antrasit sol panel")
+    degistir(h,
+             "        ),\n      ),\n    );\n  }\n\n  buildRightPane(BuildContext context) {",
+             "        ),\n      )),\n    );\n  }\n\n  buildRightPane(BuildContext context) {",
+             "tema: sol panel kapanisi")
+    degistir(h,
+             "Color.fromARGB(255, 226, 66, 188),\n                  Color.fromARGB(255, 244, 114, 124),",
+             "Color(0xFFEA580C),\n                  Color(0xFFF59E0B),", "tema: bilgi karti rengi")
+
+
 def rc_metni(s: str) -> str:
     """Windows kaynak (.rc) dosyasi icin ASCII'ye cevirir (o, u vb.)."""
     tablo = str.maketrans("çğıöşüÇĞİÖŞÜ", "cgiosuCGIOSU")
@@ -145,6 +217,9 @@ def main() -> None:
              depo, "genel sunucu uyari baglantisi")
     degistir("flutter/lib/desktop/pages/desktop_home_page.dart", "https://rustdesk.com/download",
              f"{depo}/releases/latest", "indirme baglantisi")
+
+    # --- Renk temasi ---------------------------------------------------------
+    tema_uygula()
 
     # --- Windows dosya ozellikleri (Ozellikler > Ayrintilar) ---------------
     rc_ad = rc_metni(gorunen)
