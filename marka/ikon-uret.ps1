@@ -11,8 +11,9 @@ function Ciz-Logo([int]$boyut) {
     $s = $boyut / 512.0
     $g.ScaleTransform($s, $s)
 
-    $mavi = [System.Drawing.ColorTranslator]::FromHtml('#1D4ED8')
-    $turkuaz = [System.Drawing.ColorTranslator]::FromHtml('#06B6D4')
+    # Gun Batimi: koyu turuncu -> kehribar
+    $mavi = [System.Drawing.ColorTranslator]::FromHtml('#EA580C')
+    $turkuaz = [System.Drawing.ColorTranslator]::FromHtml('#F59E0B')
     $beyaz = [System.Drawing.Color]::White
 
     # Yuvarlak kose kare + gradyan
